@@ -1,24 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import "./App.css";
+import { Products } from "./features/products/Products";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAsync } from "./features/cart/cartSlice";
+import { Cart } from "./features/cart/Cart";
 
 function App() {
+  const [showCart, setShowCart] = useState(false);
+  const items = useSelector((state) => state.cart.items);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchAsync());
+  }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <div className="App">
+        <button onClick={() => setShowCart(!showCart)}>
+          Cart[{items.length}]
+        </button>
+        {showCart ? <Cart></Cart> : <Products></Products>}
+      </div>
+    </>
   );
 }
 
